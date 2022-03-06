@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import configparser
+
+config = configparser.ConfigParser()
+config.read('secrets.ini')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p$%%&bex7tpovz0s*5z-yxb$sulu1wcw)x^z-0()lyzyk4^6oe'
+SECRET_KEY = config['django']['key_dev']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,10 +79,15 @@ WSGI_APPLICATION = 'mEDium.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config['postgres']['DB'],
+        'USER': config['postgres']['User'],
+        'PASSWORD': config['postgres']['Password'],
+        'HOST': config['postgres']['Host'],
+        'PORT': config['postgres']['Port']
     }
 }
 
